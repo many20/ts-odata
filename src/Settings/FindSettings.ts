@@ -1,7 +1,7 @@
 export class FindSettings {
     
-    find: string | null | undefined;
-    defaultFind: string | null;
+    find: number | string | null | undefined;
+    defaultFind: number | string | null;
 
     constructor() {
         this.find = null;

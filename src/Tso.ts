@@ -1,4 +1,5 @@
 import { FilterClause } from './FilterClause';
+import { ExpandClause } from './ExpandClause';
 import { PrecedenceGroup } from './PrecedenceGroup';
 import { FilterObj } from './FilterObj';
 import { OrderBySettings } from './Settings/OrderBySettings';
@@ -152,12 +153,12 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     // find
-    setFindDefault(property: string): Tso<CallForType, ReturnType> {
+    setFindDefault(property: number | string): Tso<CallForType, ReturnType> {
         this.FindSettings.defaultFind = property;
         return this;
     }
 
-    find(property: string | null | undefined): Tso<CallForType, ReturnType> {
+    find(property: number | string | null | undefined): Tso<CallForType, ReturnType> {
         this.FindSettings.find = property;
         return this;
     }
@@ -254,13 +255,23 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     // expand
-    setExpandDefault<U>(expand: (keyof CallForType)[]): Tso<CallForType, ReturnType> {
-        this.ExpandSettings.DefaultExpand = expand;       
+    setExpandDefault<U = any>(expand: keyof CallForType | (keyof CallForType)[]): Tso<CallForType, ReturnType> {
+        if (!!expand) {
+            if (!Array.isArray(expand)) {
+                expand = [expand];
+            }
+            this.ExpandSettings.DefaultExpand = expand;
+        }    
         return this;
     }
 
-    expand<U>(expand: (keyof CallForType)[] | null | undefined): Tso<CallForType, ReturnType> {
-        this.ExpandSettings.Expand = expand;
+    expand<U = any>(expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined): Tso<CallForType, ReturnType> {
+        if (!!expand) {
+            if (!Array.isArray(expand)) {
+                expand = [expand];
+            }
+            this.ExpandSettings.Expand = expand;
+        }
         return this;
     }
 
@@ -481,7 +492,7 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     public callFunction: ((queryString: string) => ReturnType) | undefined;
-    public setCallFunction(callFunction: (queryString: string) => ReturnType) {
+    public setCallFunction(callFunction: (queryString: string) => ReturnType): Tso<CallForType, ReturnType> {
         this.callFunction = callFunction;
         return this;
     }

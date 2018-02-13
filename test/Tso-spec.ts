@@ -247,6 +247,13 @@ describe('tsdata', () => {
       j.resetExpand();
       expect(j.toString()).to.equal('http://foo.bar?$expand=Address');
     });
+
+    it('should cause an $expand multible parameters on toString', function () {
+      var j = new Tso('http://foo.bar');
+      j.expand(['Customer', 'Data']);
+      expect(j.toString()).to.equal('http://foo.bar?$expand=Customer,Data');
+    });
+
   });
 
   describe('Format - ', function () {
@@ -929,5 +936,53 @@ describe('tsdata', () => {
         expect(j.toString()).to.equal("http://foo.bar")
       })
     });
+
+    describe('Count - ', function () {
+      it('count', function () {
+        var j = new Tso('http://foo.bar').count();
+        expect(j.toString()).to.equal('http://foo.bar?$count=true');
+      });
+    });
+
+    describe('Find - ', function () {
+      it('find primary key is string', function () {
+        var j = new Tso('http://foo.bar').find('\'testKey\'');
+        expect(j.toString()).to.equal('http://foo.bar(\'testKey\'))');
+      });
+      
+      it('find primary key is number', function () {
+        var j = new Tso('http://foo.bar').find(12345667);
+        expect(j.toString()).to.equal('http://foo.bar(12345667))');
+      });
+
+      it('find primary key is number', function () {
+        var j = new Tso('http://foo.bar').find('12345667');
+        expect(j.toString()).to.equal('http://foo.bar(12345667))');
+      });
+    });
+
+    describe('call - ', function () {
+      it('set CallFunction', function () {
+        var j = new Tso('http://foo.bar').setCallFunction((queryString) => { 
+          //call ajex request with queryString
+          var responseFromRequest = { data: 'bla' };
+          return responseFromRequest;
+        });
+
+        expect(j.call()).to.equal({ data: 'bla' });
+      });
+      it('exec call with function', function () {
+        var j = new Tso('http://foo.bar');
+
+        expect(j.call((queryString) => { 
+          //call ajex request with queryString
+          var responseFromRequest = { data: 'bla' };
+          return responseFromRequest;
+
+        })).to.equal({ data: 'bla' });
+
+      });
+    });
+
   });
 });

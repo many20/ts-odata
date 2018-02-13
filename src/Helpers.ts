@@ -1,22 +1,23 @@
+import { IFilterClause } from './IFilterClause';
+
 export class Helpers {
-    public static formatValue (value: any): any {
-        if (value.length > 8 && value.substring(0, 8) === 'datetime') {
-            return value;
-        }
 
-        if (value.length > 4 && value.substring(0, 4) === 'guid') {
-            return value;
-        }
-
-        if (value.length > 4 && value.substring(0, 6) === 'v4guid') {
-            return value.slice(6, value.length);
-        }
-
+    public static formatValue (value: string | number | boolean): string | number | boolean {
+        
         if (typeof value === 'string') {
-            let numberSuffixes = ['m', 'f', 'd'];
+
+            if (value.length > 8 && value.substring(0, 8) === 'datetime') {
+                return value;
+            }
+
+            if (value.length > 4 && (value.substring(0, 4) === 'guid' || value.substring(0, 4) === 'cast')) {
+                return value;
+            }
+       
+            let numberSuffixes: string[] = ['m', 'f', 'd'];
             for (let i = 0; i < numberSuffixes.length; i++) {
                 let suffix = numberSuffixes[i];
-                if (value.indexOf(suffix, (<any>value).length - (<any>suffix).length) !== -1) {
+                if (value.indexOf(suffix, value.length - suffix.length) !== -1) {
                     let numberValue = value.substring(0, (<any>value).length - 1);
                     if (!isNaN(<any>numberValue)) {
                         return value;
@@ -24,12 +25,17 @@ export class Helpers {
                 }
             }
 
+            //if (value.substr(0, 1) === '\'' && value.substr(value.length - 1, value.length) === '\'') {
+            //    return value;
+            //}
+
             return '\'' + value + '\'';
         }
 
         return value;
     }
-    public static addLogicalOperator (value: any, operator: any, filterClause: any): any {
+
+    public static addLogicalOperator (value: string | number | boolean, operator: string, filterClause: IFilterClause): IFilterClause {
         filterClause.value = value;
         filterClause.isClauseEmpty = false;
 
@@ -37,16 +43,19 @@ export class Helpers {
 
         return filterClause;
     }
-    public static addArithmeticOperator (amount: any, operator: any, filterClause: any): any {
+
+    public static addArithmeticOperator (amount: number, operator: string, filterClause: IFilterClause): IFilterClause {
         filterClause.components.push(operator + ' ' + amount);
+        
         return filterClause;
     }
-    public static addMethodWrapper (filterClause: any, func: any): any {
+
+    public static addMethodWrapper (filterClause: IFilterClause, func: string): IFilterClause {
         filterClause.propertyIncluded = true;
         filterClause.funcReturnType = Number();
-        let that = filterClause;
-        filterClause.components.push(func + '(' + that.property + ')');
+        filterClause.components.push(func + '(' + filterClause.property + ')');
 
         return filterClause;
     }
+
 }

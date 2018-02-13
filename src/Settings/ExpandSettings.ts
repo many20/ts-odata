@@ -1,22 +1,37 @@
 export class ExpandSettings {
 
-    expand: string;
-    defaultExpand: string;
+    Expand: string[];
+    DefaultExpand: string[];
 
     constructor() {
-        this.expand = null;
-        this.defaultExpand = null;
+        this.Expand = [];
+        this.DefaultExpand = [];
     }
 
     toString(): string {
-        return '$expand=' + (this.expand || this.defaultExpand);
+        let allExpands: { toString: () => string; }[] = [];
+        let expand: string= '$expand=';
+
+        if (this.DefaultExpand.length > 0) {
+            for (let i = 0; i < this.DefaultExpand.length; i++) {
+                allExpands.push(this.DefaultExpand[i]);
+            }
+        }
+
+        for (let i = 0; i < this.Expand.length; i++) {
+            allExpands.push(this.Expand[i]);
+        }
+
+        expand += allExpands.join(',');
+
+        return expand;
     }
 
     reset(): void {
-        this.expand = null;
+        this.Expand = [];
     }
 
     isSet(): boolean {
-        return this.expand !== null || this.defaultExpand !== null;
+        return this.Expand.length > 0 || this.DefaultExpand.length > 0;
     }
 }

@@ -1,9 +1,9 @@
 export class OrderBySettings {
 
-    property: string;
-    order: string;
-    defaultProperty: string;
-    defaultOrder: string;
+    property: string | null | undefined;
+    order: string | null;
+    defaultProperty: string | null;
+    defaultOrder: string | null;
 
     constructor() {
         this.property = null;
@@ -13,7 +13,7 @@ export class OrderBySettings {
     }
 
     toString(): string {
-        let qsValue = '$orderby=' + (this.property || this.defaultProperty);
+        let qsValue: string = '$orderby=' + (this.property || this.defaultProperty);
         if (this.defaultOrder !== null || this.order !== null) {
             qsValue += ' ' + (this.order || this.defaultOrder);
         }
@@ -27,6 +27,6 @@ export class OrderBySettings {
     }
 
     isSet(): boolean {
-        return this.property !== null || this.defaultProperty !== null;
+        return (this.property !== null && typeof this.property !== 'undefined') || this.defaultProperty !== null;
     }
 }

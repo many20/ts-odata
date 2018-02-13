@@ -1,12 +1,12 @@
 export class SkipSettings {
-    skip: number;
-    defaultSkip: number;
+    
+    skip: number | null | undefined;
+    defaultSkip: number | null;
 
     constructor() {
         this.skip = null;
         this.defaultSkip = null;
     }
-
 
     toString(): string {
         return '$skip=' + (this.skip !== null ? this.skip : this.defaultSkip);
@@ -17,6 +17,6 @@ export class SkipSettings {
     }
 
     isSet(): boolean {
-        return this.skip !== null || this.defaultSkip !== null;
+        return (this.skip !== null && typeof this.skip !== 'undefined') || this.defaultSkip !== null;
     }
 }

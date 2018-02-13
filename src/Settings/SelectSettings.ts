@@ -1,15 +1,15 @@
 export class SelectSettings {
-    select: string[];
-    defaultSelect: string[];
+    
+    select: string[] | null | undefined;
+    defaultSelect: string[] | null;
 
     constructor() {
         this.select = null;
         this.defaultSelect = null;
     }
 
-
     toString(): string {
-        let selectArray = (this.select || this.defaultSelect);
+        let selectArray: string[] = (this.select || this.defaultSelect) || [];
         return '$select=' + selectArray.join(',');
     }
 
@@ -18,6 +18,6 @@ export class SelectSettings {
     }
 
     isSet(): boolean {
-        return this.select !== null || this.defaultSelect !== null;
+        return (this.select !== null && typeof this.select !== 'undefined') || this.defaultSelect !== null;
     }
 }

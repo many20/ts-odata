@@ -1,6 +1,7 @@
 export class TopSettings {
-    top: number;
-    defaultTop: number;
+    
+    top: number | null | undefined;
+    defaultTop: number | null;
 
     constructor() {
         this.top = null;
@@ -16,6 +17,6 @@ export class TopSettings {
     }
 
     isSet(): boolean {
-        return this.top !== null || this.defaultTop !== null;
+        return (this.top !== null && typeof this.top !== 'undefined') || this.defaultTop !== null;
     }
 }

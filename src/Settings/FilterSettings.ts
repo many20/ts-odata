@@ -1,10 +1,12 @@
-import {FilterClause} from  '../FilterClause';
-import {PrecedenceGroup} from  '../PrecedenceGroup';
-import {FilterObj} from '../FilterObj';
+import { FilterClause } from '../FilterClause';
+import { PrecedenceGroup } from '../PrecedenceGroup';
+import { FilterObj } from '../FilterObj';
+
 export class FilterSettings {
-    Filters: any[];
-    DefaultFilters: any[];
-    CapturedFilter: any[];
+
+    Filters: FilterObj[];
+    DefaultFilters: FilterObj[];
+    CapturedFilter: FilterObj[];
 
     constructor() {
         this.Filters = [];
@@ -13,26 +15,24 @@ export class FilterSettings {
     }
 
     toString() {
-        let allFilters: any[], i: any, filter: any;
-
-        allFilters = [];
-        filter = '$filter=';
+        let allFilters: FilterObj[] = [];
+        let filter: string= '$filter=';
 
         if (this.DefaultFilters.length > 0) {
-            for (i = 0; i < this.DefaultFilters.length; i++) {
+            for (let i = 0; i < this.DefaultFilters.length; i++) {
                 allFilters.push(this.DefaultFilters[i]);
             }
         }
 
-        for (i = 0; i < this.Filters.length; i++) {
+        for (let i = 0; i < this.Filters.length; i++) {
             allFilters.push(this.Filters[i]);
         }
 
-        for (i = 0; i < allFilters.length; i++) {
+        for (let i = 0; i < allFilters.length; i++) {
             filter += allFilters[i].toString(i);
         }
 
-        return encodeURI(filter);
+        return filter;
     }
 
     reset() {
@@ -49,17 +49,16 @@ export class FilterSettings {
         this.CapturedFilter = [];
     }
 
-    loadFromJson(filterSettings: any): void {
-        let i: any, filter: any;
+    loadFromJson(filterSettings: FilterSettings): void {
+        let filter: FilterObj;
 
-
-        for (i = 0; i < filterSettings.Filters.length; i++) {
+        for (let i = 0; i < filterSettings.Filters.length; i++) {
             filter = filterSettings.Filters[i];
             let fO: FilterObj = new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator);
             this.Filters.push(fO);
         }
 
-        for (i = 0; i < filterSettings.DefaultFilters.length; i++) {
+        for (let i = 0; i < filterSettings.DefaultFilters.length; i++) {
             filter = filterSettings.DefaultFilters[i];
             this.DefaultFilters.push(new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator));
         }
@@ -70,34 +69,34 @@ export class FilterSettings {
     }
 
 
-    private loadPrecedenceGroup(precedenceGroup: any): any {
-        let j: any, group: any, currentClause: any;
+    private loadPrecedenceGroup(precedenceGroup: PrecedenceGroup): any {
+        let group: PrecedenceGroup; 
+        let currentClause: FilterObj;
 
         group = new PrecedenceGroup();
 
-        for (j = 0; j < precedenceGroup.clauses.length; j++) {
+        for (let j = 0; j < precedenceGroup.clauses.length; j++) {
             currentClause = precedenceGroup.clauses[j];
             group.clauses.push(new FilterObj(this.loadFilterObj(currentClause.filterObj), currentClause.logicalOperator));
         }
 
         return group;
-    };
+    }
 
-    private loadFilterObj(currentFilter: any): any {
-        if (currentFilter.clauses !== undefined) {
-            return this.loadPrecedenceGroup(currentFilter);
+    private loadFilterObj(currentFilter: FilterClause | PrecedenceGroup): any {
+        //isPrecedenceGroup?
+        if ((currentFilter as PrecedenceGroup).clauses !== undefined) {
+            return this.loadPrecedenceGroup(currentFilter as PrecedenceGroup);
         }
 
-        let key: any;
+        let newFilterClause: FilterClause = new FilterClause();
 
-        let newFilterClause = new FilterClause('123');
-
-        for (key in currentFilter) {
+        for (let key in currentFilter) {
             if (currentFilter.hasOwnProperty(key)) {
-                (<any>newFilterClause)[key] = currentFilter[key];
+                (newFilterClause as any)[key] = (currentFilter as any)[key];
             }
         }
 
         return newFilterClause;
-    };
+    }
 }

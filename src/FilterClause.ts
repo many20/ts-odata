@@ -1,31 +1,38 @@
-import {Helpers} from './Helpers';
-import {Concat} from './Concat';
-export class FilterClause {
+import { Helpers } from './Helpers';
+import { Concat } from './Concat';
+import { IFilterClause } from './IFilterClause';
 
-    property: string;
+export class FilterClause<FilterType = any, FilterOfType = any> implements IFilterClause<FilterType, FilterOfType> {
+
+    property: keyof FilterType | null;
     components: string[];
-    isClauseEmpty: Boolean;
-    propertyIncluded: Boolean;
-    usingNot: Boolean;
-    value: any;
-    funcReturnType: any;
-    transformFunc: Function;
+    isClauseEmpty: boolean;
+    propertyIncluded: boolean;
+    usingNot: boolean;
+    value: string | number | boolean | null;
+    funcReturnType: string | number | boolean | null;
+    transformFunc: Function | null;
 
-
-    constructor(property: string = null) {
+    constructor(property: keyof FilterType | null = null) {
         this.property = property;
         this.components = [];
+        this.isClauseEmpty = false;
+        this.propertyIncluded = false;
+        this.usingNot = false;
+        this.value = null;
+        this.funcReturnType = null;
+        this.transformFunc = null;
     }
 
     toString(): string {
-        let strComps: any, i: any, filterStr: any;
-        strComps = [];
+        let strComps: string[] = [];
+        let filterStr: string;
 
         if (!this.propertyIncluded) {
             strComps.push(this.property);
         }
 
-        for (i = 0; i < this.components.length; i++) {
+        for (let i = 0; i < this.components.length; i++) {
             strComps.push(this.components[i]);
         }
         filterStr = strComps.join(' ');
@@ -42,78 +49,77 @@ export class FilterClause {
     }
 
     // Logical operators
-    eq(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'eq', this);
+    eq(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'eq', this) as any;
     }
 
-    ne(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'ne', this);
+    ne(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'ne', this) as any;
     }
 
-    gt(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'gt', this);
+    gt(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'gt', this) as any;
     }
 
-    ge(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'ge', this);
+    ge(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'ge', this) as any;
     }
 
-    lt(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'lt', this);
+    lt(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'lt', this) as any;
     }
 
-    le(value: string|number|boolean): FilterClause {
-        return Helpers.addLogicalOperator(value, 'le', this);
+    le(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addLogicalOperator(value, 'le', this) as any;
     }
 
-    not(): FilterClause {
+    not(): FilterClause<FilterType, FilterOfType> {
         this.usingNot = true;
         return this;
     }
 
     // Arithmetic methods
-    add(amount: number): FilterClause {
-        return Helpers.addArithmeticOperator(amount, 'add', this);
+    add(amount: number): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addArithmeticOperator(amount, 'add', this) as any;
     }
 
-    sub(amount: number): FilterClause {
-        return Helpers.addArithmeticOperator(amount, 'sub', this);
+    sub(amount: number): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addArithmeticOperator(amount, 'sub', this) as any;
     }
 
-    mul(amount: number): FilterClause {
-        return Helpers.addArithmeticOperator(amount, 'mul', this);
+    mul(amount: number): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addArithmeticOperator(amount, 'mul', this) as any;
     }
 
-    div(amount: number): FilterClause {
-        return Helpers.addArithmeticOperator(amount, 'div', this);
+    div(amount: number): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addArithmeticOperator(amount, 'div', this) as any;
     }
 
-    mod(amount: number): FilterClause {
-        return Helpers.addArithmeticOperator(amount, 'mod', this);
+    mod(amount: number): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addArithmeticOperator(amount, 'mod', this) as any;
     }
 
     // String functions
-    substringof(value: string): FilterClause {
+    substringof(value: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Boolean();
 
-        let property = this.property;
+        let property: string | undefined;
         if (this.transformFunc !== null) {
             property = this.components[this.components.length - 1];
             this.components.splice(this.components.length - 1, 1);
         }
 
-        if (property) {
+        if (!!property) {
           this.components.push('substringof(\'' + value + '\',' + property + ')');
         } else {
           this.components.push('substringof(\'' + value + '\',' + this.property + ')');
         }
 
-
         return this;
     }
 
-    substring(position: number, length?: number): FilterClause {
+    substring(position: number, length?: number): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
 
@@ -127,29 +133,27 @@ export class FilterClause {
         return this;
     }
 
-    toLower(): FilterClause {
+    toLower(): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
-        let that = this;
 
         this.transformFunc = this.toLower;
-        this.components.push('tolower(' + that.property + ')');
+        this.components.push('tolower(' + this.property + ')');
 
         return this;
     }
 
-    toUpper(): FilterClause {
+    toUpper(): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
-        let that = this;
 
         this.transformFunc = this.toUpper;
-        this.components.push('toupper(' + that.property + ')');
+        this.components.push('toupper(' + this.property + ')');
 
         return this;
     }
 
-    trim(): FilterClause {
+    trim(): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
 
@@ -159,96 +163,129 @@ export class FilterClause {
         return this;
     }
 
-    endswith(value: string): FilterClause {
+    endswith(value: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Boolean();
-        let that = this;
-        this.components.push('endswith(' + that.property + ',\'' + value + '\')');
+
+        this.components.push('endswith(' + this.property + ',\'' + value + '\')');
 
         return this;
     }
 
-    startswith(value: string): FilterClause {
+    startswith(value: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Boolean();
-        let that = this;
-        this.components.push('startswith(' + that.property + ',\'' + value + '\')');
+
+        this.components.push('startswith(' + this.property + ',\'' + value + '\')');
 
         return this;
     }
 
-    length(): FilterClause {
+    length(): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Number();
-        let that = this;
-        this.components.push('length(' + that.property + ')');
+
+        this.components.push('length(' + this.property + ')');
 
         return this;
     }
 
-    indexof(value: string): FilterClause {
+    indexof(value: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Number();
-        let that = this;
-        this.components.push('indexof(' + that.property + ',\'' + value + '\')');
+
+        this.components.push('indexof(' + this.property + ',\'' + value + '\')');
 
         return this;
     }
 
-    replace(find: string, replace: string): FilterClause {
+    replace(find: string, replace: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
-        let that = this;
-        this.components.push('replace(' + that.property + ',\'' + find + '\',\'' + replace + '\')');
+
+        this.components.push('replace(' + this.property + ',\'' + find + '\',\'' + replace + '\')');
 
         return this;
     }
 
     // Concat
-    Concat(concat: Concat): FilterClause {
+    Concat(concat: Concat): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = String();
-        let that = this;
-        that.components.push(concat.toString());
+
+        this.components.push(concat.toString());
 
         return this;
     }
 
     // Date functions
-    day(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'day');
+    day(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'day') as any;
     }
 
-    hour(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'hour');
+    hour(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'hour') as any;
     }
 
-    minute(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'minute');
+    minute(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'minute') as any;
     }
 
-    month(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'month');
+    month(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'month') as any;
     }
 
-    second(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'second');
+    second(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'second') as any;
     }
 
-    year(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'year');
+    year(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'year') as any;
     }
 
     // Math functions
-    round(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'round');
+    round(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'round') as any;
     }
 
-    floor(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'floor');
+    floor(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'floor') as any;
     }
 
-    ceiling(): FilterClause {
-        return Helpers.addMethodWrapper(this, 'ceiling');
+    ceiling(): FilterClause<FilterType, FilterOfType> {
+        return Helpers.addMethodWrapper(this, 'ceiling') as any;
     }
+
+    //$filter=isof(expression, type) of $filter=isof(type)
+    isOf(type: string): FilterClause<FilterType, FilterOfType> {
+        this.propertyIncluded = false;
+        this.funcReturnType = Boolean();
+
+        if (this.property !== null) {
+            this.components.push('isof(' + this.property + ',' + type + ')');
+        } else {
+            this.components.push('isof(' + type + ')');
+        }
+        
+        return this;
+    }
+
+    any<U>(filter: FilterClause<FilterOfType, U>): FilterClause<FilterType, FilterOfType> {
+        this.propertyIncluded = true;
+        this.funcReturnType = Boolean();
+
+        this.components.push(`${this.property}/any(d:d/${filter.toString()})`);
+
+        return this;
+    }
+
+    all<U>(filter: FilterClause<FilterOfType, U>): FilterClause<FilterType, FilterOfType> {
+        this.propertyIncluded = true;
+        this.funcReturnType = Boolean();
+
+        this.components.push(`${this.property}/all(d:d/${filter.toString()})`);
+
+        return this;
+    }
+
 }

@@ -18,7 +18,7 @@ export class OrderBySettings {
             qsValue += ' ' + (this.order || this.defaultOrder);
         }
 
-        return encodeURI(qsValue);
+        return qsValue;
     }
 
     reset(): void {

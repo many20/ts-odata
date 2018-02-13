@@ -1,5 +1,5 @@
 export class TopSettings {
-    
+
     top: number | null | undefined;
     defaultTop: number | null;
 

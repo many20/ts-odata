@@ -1,5 +1,5 @@
 export class FormatSettings {
-    
+
     format: string | null;
     defaultFormat: string | null;
 

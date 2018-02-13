@@ -256,7 +256,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
         return Helpers.addMethodWrapper(this, 'ceiling') as any;
     }
 
-    //$filter=isof(expression, type) of $filter=isof(type)
+    // $filter=isof(expression, type) of $filter=isof(type)
     isOf(type: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = false;
         this.funcReturnType = Boolean();
@@ -266,7 +266,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
         } else {
             this.components.push('isof(' + type + ')');
         }
-        
+
         return this;
     }
 

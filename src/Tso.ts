@@ -19,6 +19,8 @@ export { Concat } from './Concat';
 
 export class Tso<CallForType = any, ReturnType = any> {
     baseUri: string;
+    encodeUri: boolean;
+
     ExpandSettings: ExpandSettings;
     FilterSettings: FilterSettings;
     FormatSettings: FormatSettings;
@@ -35,6 +37,8 @@ export class Tso<CallForType = any, ReturnType = any> {
     inlineCountDefault: IInlineCountOptions<CallForType, ReturnType>;
 
     currentHashRoute: string;
+
+    public callFunction: ((queryString: string) => ReturnType) | undefined;
 
     static literal(stringLiteral: { toString(): string; }): string {
         return '\'' + stringLiteral.toString() + '\'';
@@ -64,7 +68,7 @@ export class Tso<CallForType = any, ReturnType = any> {
         return single + 'f';
     }
 
-    //cast(type) or cast(expression,type)
+    // cast(type) or cast(expression,type)
     static cast(expression: string | null = null, type: string) {
         if (!!expression) {
             return 'cast(' + type + ')';
@@ -73,8 +77,10 @@ export class Tso<CallForType = any, ReturnType = any> {
         }
     }
 
-    constructor(baseUri: string) {
+    constructor (baseUri: string, encodeUri: boolean = true) {
         this.baseUri = baseUri;
+        this.encodeUri = encodeUri;
+
         this.ExpandSettings = new ExpandSettings();
         this.FilterSettings = new FilterSettings();
         this.FormatSettings = new FormatSettings();
@@ -260,17 +266,22 @@ export class Tso<CallForType = any, ReturnType = any> {
             if (!Array.isArray(expand)) {
                 expand = [expand];
             }
-            this.ExpandSettings.DefaultExpand = expand;
-        }    
+            this.ExpandSettings.defaultExpand = expand;
+        } else {
+            this.ExpandSettings.defaultExpand = null;
+        }
         return this;
     }
 
     expand<U = any>(expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined): Tso<CallForType, ReturnType> {
+
         if (!!expand) {
             if (!Array.isArray(expand)) {
                 expand = [expand];
             }
-            this.ExpandSettings.Expand = expand;
+            this.ExpandSettings.expand = expand;
+        } else {
+            this.ExpandSettings.expand = null;
         }
         return this;
     }
@@ -337,13 +348,13 @@ export class Tso<CallForType = any, ReturnType = any> {
         }
 
         for (let i = 0; i < this.FilterSettings.Filters.length; i++) {
-            //isFilterClause
+            // isFilterClause
             if ((this.FilterSettings.Filters[i].filterObj as FilterClause).property === property) {
                 this.FilterSettings.Filters.splice(i, 1);
             }
         }
 
-        //TODO: remove PrecedenceGroups Filter
+        // TODO: remove PrecedenceGroups Filter
 
         return this;
     }
@@ -427,7 +438,13 @@ export class Tso<CallForType = any, ReturnType = any> {
             components.push(this.CountSettings.toString());
         }
 
-        return components.length > 0 ? url + '?' + components.join('&') : url;
+        let queryUrl = components.length > 0 ? url + '?' + components.join('&') : url;
+
+        if (this.encodeUri) {
+            queryUrl = encodeURI(queryUrl);
+        }
+
+        return queryUrl;
     }
 
     toJson(): string {
@@ -491,7 +508,6 @@ export class Tso<CallForType = any, ReturnType = any> {
         return JSON.stringify(jsonObj);
     }
 
-    public callFunction: ((queryString: string) => ReturnType) | undefined;
     public setCallFunction(callFunction: (queryString: string) => ReturnType): Tso<CallForType, ReturnType> {
         this.callFunction = callFunction;
         return this;

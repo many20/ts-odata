@@ -1,5 +1,5 @@
 export class SelectSettings {
-    
+
     select: string[] | null | undefined;
     defaultSelect: string[] | null;
 

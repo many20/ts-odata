@@ -1,5 +1,5 @@
 export class InlineCountSettings {
-    
+
     inlineCount: string | null;
     defaultInlineCount: string | null;
 

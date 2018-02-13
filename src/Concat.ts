@@ -1,5 +1,5 @@
 export class Concat {
-    
+
     constructor(public leftSide: string|Concat, public rightSide: string|Concat) {
     }
 

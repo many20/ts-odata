@@ -16,7 +16,7 @@ export class FilterSettings {
 
     toString() {
         let allFilters: FilterObj[] = [];
-        let filter: string= '$filter=';
+        let filter = '$filter=';
 
         if (this.DefaultFilters.length > 0) {
             for (let i = 0; i < this.DefaultFilters.length; i++) {
@@ -70,7 +70,7 @@ export class FilterSettings {
 
 
     private loadPrecedenceGroup(precedenceGroup: PrecedenceGroup): any {
-        let group: PrecedenceGroup; 
+        let group: PrecedenceGroup;
         let currentClause: FilterObj;
 
         group = new PrecedenceGroup();
@@ -84,7 +84,7 @@ export class FilterSettings {
     }
 
     private loadFilterObj(currentFilter: FilterClause | PrecedenceGroup): any {
-        //isPrecedenceGroup?
+        // isPrecedenceGroup?
         if ((currentFilter as PrecedenceGroup).clauses !== undefined) {
             return this.loadPrecedenceGroup(currentFilter as PrecedenceGroup);
         }

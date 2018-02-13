@@ -1,5 +1,5 @@
 export class FindSettings {
-    
+
     find: number | string | null | undefined;
     defaultFind: number | string | null;
 

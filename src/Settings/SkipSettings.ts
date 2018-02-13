@@ -1,5 +1,5 @@
 export class SkipSettings {
-    
+
     skip: number | null | undefined;
     defaultSkip: number | null;
 

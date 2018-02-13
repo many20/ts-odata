@@ -947,18 +947,36 @@ describe('tsdata', () => {
     describe('Find - ', function () {
       it('find primary key is string', function () {
         var j = new Tso('http://foo.bar').find('\'testKey\'');
-        expect(j.toString()).to.equal('http://foo.bar(\'testKey\'))');
+        expect(j.toString()).to.equal('http://foo.bar(\'testKey\')');
       });
       
       it('find primary key is number', function () {
         var j = new Tso('http://foo.bar').find(12345667);
-        expect(j.toString()).to.equal('http://foo.bar(12345667))');
+        expect(j.toString()).to.equal('http://foo.bar(12345667)');
       });
 
       it('find primary key is number', function () {
         var j = new Tso('http://foo.bar').find('12345667');
-        expect(j.toString()).to.equal('http://foo.bar(12345667))');
+        expect(j.toString()).to.equal('http://foo.bar(12345667)');
       });
+
+      it('has a default', function () {
+        var j = new Tso('http://foo.bar');
+        j.setFindDefault('\'testKeyDefault\'');
+        expect(j.toString()).to.equal('http://foo.bar(\'testKeyDefault\')');
+      });
+
+      it('is reset to default', function () {
+        var j = new Tso('http://foo.bar');
+        j.setFindDefault('\'testKeyDefault\'');
+  
+        j.find('\'testKey\'');
+        expect(j.toString()).to.equal('http://foo.bar(\'testKey\')');
+  
+        j.resetFind();
+        expect(j.toString()).to.equal('http://foo.bar(\'testKeyDefault\')');
+      });
+
     });
 
     describe('call - ', function () {
@@ -966,10 +984,10 @@ describe('tsdata', () => {
         var j = new Tso('http://foo.bar').setCallFunction((queryString) => { 
           //call ajex request with queryString
           var responseFromRequest = { data: 'bla' };
-          return responseFromRequest;
+          return JSON.stringify(responseFromRequest);
         });
 
-        expect(j.call()).to.equal({ data: 'bla' });
+        expect(j.call()).to.equal(JSON.stringify({ data: 'bla' }));
       });
       it('exec call with function', function () {
         var j = new Tso('http://foo.bar');
@@ -977,9 +995,9 @@ describe('tsdata', () => {
         expect(j.call((queryString) => { 
           //call ajex request with queryString
           var responseFromRequest = { data: 'bla' };
-          return responseFromRequest;
+          return JSON.stringify(responseFromRequest);
 
-        })).to.equal({ data: 'bla' });
+        })).to.equal(JSON.stringify({ data: 'bla' }));
 
       });
     });

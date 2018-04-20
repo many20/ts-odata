@@ -32,7 +32,7 @@ export class PrecedenceGroup<FilterType = any> {
         let filter: string;
 
         filter = '(';
-        for (let i = 0; i < this.clauses.length; i++) {
+        for (let i = 0; i < this.clauses.length; i += 1) {
             filter += this.clauses[i].toString(i);
         }
         filter += ')';

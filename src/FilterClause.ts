@@ -30,7 +30,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
             strComps.push(this.property);
         }
 
-        for (let i = 0; i < this.components.length; i++) {
+        for (let i = 0; i < this.components.length; i += 1) {
             strComps.push(this.components[i]);
         }
 
@@ -40,7 +40,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
             return filterStr;
         }
 
-        return typeof this.funcReturnType === 'boolean' ? `not ${filterStr}` : `not ( ${filterStr})`;
+        return typeof this.funcReturnType === 'boolean' ? `not ${filterStr}` : `not (${filterStr})`;
     }
 
     isEmpty(): Boolean {
@@ -147,7 +147,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
         this.propertyIncluded = true;
         this.funcReturnType = String();
 
-        let comps = [this.property, position];
+        const comps = [this.property, position];
         if (length !== undefined) {
             comps.push(length);
         }
@@ -280,7 +280,7 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
         return Helpers.addMethodWrapper(this, 'ceiling') as FilterClause<FilterType, FilterOfType>;
     }
 
-    //$filter=isof(expression, type) or $filter=isof(type)
+    // $filter=isof(expression, type) or $filter=isof(type)
     isOf(type: string): FilterClause<FilterType, FilterOfType> {
         this.propertyIncluded = true;
         this.funcReturnType = Boolean();

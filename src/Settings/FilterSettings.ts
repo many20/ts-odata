@@ -18,16 +18,16 @@ export class FilterSettings {
         let filter: string = '$filter=';
 
         if (this.defaultFilters.length > 0) {
-            for (let i = 0; i < this.defaultFilters.length; i++) {
+            for (let i = 0; i < this.defaultFilters.length; i += 1) {
                 allFilters.push(this.defaultFilters[i]);
             }
         }
 
-        for (let i = 0; i < this.filters.length; i++) {
+        for (let i = 0; i < this.filters.length; i += 1) {
             allFilters.push(this.filters[i]);
         }
 
-        for (let i = 0; i < allFilters.length; i++) {
+        for (let i = 0; i < allFilters.length; i += 1) {
             filter += allFilters[i].toString(i);
         }
 
@@ -37,7 +37,7 @@ export class FilterSettings {
     reset() {
         this.filters = [];
         if (this.capturedFilter.length > 0) {
-            for (let i = 0; i < this.capturedFilter.length; i++) {
+            for (let i = 0; i < this.capturedFilter.length; i += 1) {
                 this.filters.push(this.capturedFilter[i]);
             }
         }
@@ -51,13 +51,13 @@ export class FilterSettings {
     loadFromJson(filterSettings: FilterSettings): void {
         let filter: FilterObj;
 
-        for (let i = 0; i < filterSettings.filters.length; i++) {
+        for (let i = 0; i < filterSettings.filters.length; i += 1) {
             filter = filterSettings.filters[i];
-            let fO: FilterObj = new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator);
+            const fO: FilterObj = new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator);
             this.filters.push(fO);
         }
 
-        for (let i = 0; i < filterSettings.defaultFilters.length; i++) {
+        for (let i = 0; i < filterSettings.defaultFilters.length; i += 1) {
             filter = filterSettings.defaultFilters[i];
             this.defaultFilters.push(new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator));
         }
@@ -71,7 +71,7 @@ export class FilterSettings {
         const group: PrecedenceGroup = new PrecedenceGroup();
         let currentClause: FilterObj;
 
-        for (let j = 0; j < precedenceGroup.clauses.length; j++) {
+        for (let j = 0; j < precedenceGroup.clauses.length; j += 1) {
             currentClause = precedenceGroup.clauses[j];
             group.clauses.push(new FilterObj(this.loadFilterObj(currentClause.filterObj), currentClause.logicalOperator));
         }
@@ -80,7 +80,7 @@ export class FilterSettings {
     }
 
     private loadFilterObj(currentFilter: FilterClause | PrecedenceGroup): FilterClause | PrecedenceGroup {
-        //isPrecedenceGroup?
+        // isPrecedenceGroup?
         if ((currentFilter as PrecedenceGroup).clauses !== undefined) {
             return this.loadPrecedenceGroup(currentFilter as PrecedenceGroup);
         }

@@ -6,9 +6,6 @@ import { TopSettings } from './Settings/TopSettings';
 import { SkipSettings } from './Settings/SkipSettings';
 import { SelectSettings } from './Settings/SelectSettings';
 import { ExpandSettings } from './Settings/ExpandSettings';
-import { FormatSettings } from './Settings/FormatSettings';
-import { InlineCountSettings } from './Settings/InlineCountSettings';
-import { CountSettings } from './Settings/CountSettings';
 import { FilterSettings } from './Settings/FilterSettings';
 
 export class ExpandClause<ExpandType = any, ExpandOfType = any> {
@@ -85,7 +82,7 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
     }
 
     toggleOrderBy(property: string, callback?: Function): ExpandClause<ExpandType, ExpandOfType> {
-        let useDesc = this.OrderBySettings.property === null || this.OrderBySettings.order === 'asc';
+        const useDesc = this.OrderBySettings.property === null || this.OrderBySettings.order === 'asc';
         (<any>this.orderBy(property))[useDesc ? 'desc' : 'asc']();
 
         if (callback && typeof callback === 'function') {
@@ -164,7 +161,9 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
     }
 
     // expand
-    setExpandDefault<U>(expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]): ExpandClause<ExpandType, ExpandOfType> {
+    setExpandDefault<U>(
+        expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]
+    ): ExpandClause<ExpandType, ExpandOfType> {
         if (!Array.isArray(expand)) {
             expand = [expand];
         }
@@ -173,7 +172,9 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
         return this;
     }
 
-    expand<U>(expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]): ExpandClause<ExpandType, ExpandOfType> {
+    expand<U>(
+        expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]
+    ): ExpandClause<ExpandType, ExpandOfType> {
         if (!Array.isArray(expand)) {
             expand = [expand];
         }
@@ -208,21 +209,21 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
             return this;
         }
 
-        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
-            //isFilterClause
+        for (let i = 0; i < this.FilterSettings.filters.length; i += 1) {
+            // isFilterClause
             if ((this.FilterSettings.filters[i].filterObj as FilterClause).property === property) {
                 this.FilterSettings.filters.splice(i, 1);
             }
         }
 
-        //TODO: remove PrecedenceGroups Filter
+        // TODO: remove PrecedenceGroups Filter
 
         return this;
     }
 
     captureFilter(): void {
         this.FilterSettings.capturedFilter = [];
-        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
+        for (let i = 0; i < this.FilterSettings.filters.length; i += 1) {
             this.FilterSettings.capturedFilter.push(this.FilterSettings.filters[i]);
         }
     }
@@ -254,8 +255,8 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
 
     // Casts
     toString(): string {
-        let url: string = this.property;
-        let components: string[] = [];
+        const url: string = this.property;
+        const components: string[] = [];
 
         if (!!this._OrderBySettings && this.OrderBySettings.isSet()) {
             components.push(this.OrderBySettings.toString());

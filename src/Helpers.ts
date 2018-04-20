@@ -13,7 +13,7 @@ export class Helpers {
 
             if (value.length > 1) {
                 const numberSuffixes: string[] = ['m', 'f', 'd'];
-                for (let i = 0; i < numberSuffixes.length; i++) {
+                for (let i = 0; i < numberSuffixes.length; i += 1) {
                     const suffix = numberSuffixes[i];
                     if (value.indexOf(suffix, value.length - suffix.length) !== -1) {
                         const numberValue = value.substring(0, value.length - 1);
@@ -24,7 +24,7 @@ export class Helpers {
                 }
             }
 
-            if (value.substr(0, 1) === "'" && value.substr(value.length - 1, value.length) === "'") {
+            if (value.substr(0, 1) === `'` && value.substr(value.length - 1, value.length) === `'`) {
                 return value;
             }
 

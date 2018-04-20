@@ -124,7 +124,7 @@ export class Tso<CallForType = any, ReturnType = any> {
         }
         return this._FindSettings!;
     }
-    set(settings: FindSettings): void {
+    set FindSettings(settings: FindSettings) {
         this._FindSettings = settings;
     }
 
@@ -214,6 +214,8 @@ export class Tso<CallForType = any, ReturnType = any> {
 
     currentHashRoute?: string;
 
+    public callFunction: ((queryString: string) => ReturnType) | undefined;
+
     static literal(stringLiteral: { toString(): string }): string {
         return `'${stringLiteral.toString()}'`;
     }
@@ -242,13 +244,13 @@ export class Tso<CallForType = any, ReturnType = any> {
         return `${single}f`;
     }
 
-    //cast(type) or cast(expression,type)
+    // cast(type) or cast(expression,type)
     static cast(expression: string | null = null, type: string) {
         if (!!expression) {
             return `cast(${type})`;
-        } else {
-            return `cast(${expression},${type})`;
         }
+
+        return `cast(${expression},${type})`;
     }
 
     constructor(public baseUri: string, public encodeUri: boolean = true) {}
@@ -372,7 +374,9 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this;
     }
 
-    expand<U = any>(expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined): Tso<CallForType, ReturnType> {
+    expand<U = any>(
+        expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined,
+    ): Tso<CallForType, ReturnType> {
         if (!!expand) {
             if (!Array.isArray(expand)) {
                 expand = [expand];
@@ -445,21 +449,21 @@ export class Tso<CallForType = any, ReturnType = any> {
             return this;
         }
 
-        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
-            //isFilterClause
+        for (let i = 0; i < this.FilterSettings.filters.length; i += 1) {
+            // isFilterClause
             if ((this.FilterSettings.filters[i].filterObj as FilterClause).property === property) {
                 this.FilterSettings.filters.splice(i, 1);
             }
         }
 
-        //TODO: remove PrecedenceGroups Filter
+        // TODO: remove PrecedenceGroups Filter
 
         return this;
     }
 
     captureFilter(): void {
         this.FilterSettings.capturedFilter = [];
-        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
+        for (let i = 0; i < this.FilterSettings.filters.length; i += 1) {
             this.FilterSettings.capturedFilter.push(this.FilterSettings.filters[i]);
         }
     }
@@ -491,10 +495,8 @@ export class Tso<CallForType = any, ReturnType = any> {
 
     // Casts
     toString(): string {
-        let url: string, components: string[];
-
-        url = this.baseUri;
-        components = [];
+        let url: string = this.baseUri;
+        const components: string[] = [];
 
         if (!!this._FindSettings && this.FindSettings.isSet()) {
             url += this.FindSettings.toString();
@@ -606,7 +608,6 @@ export class Tso<CallForType = any, ReturnType = any> {
         return JSON.stringify(jsonObj);
     }
 
-    public callFunction: ((queryString: string) => ReturnType) | undefined;
     public setCallFunction(callFunction: (queryString: string) => ReturnType) {
         this.callFunction = callFunction;
         return this;

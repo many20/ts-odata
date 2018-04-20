@@ -15,7 +15,7 @@ export class FilterObj<FilterType = any> {
     }
 
     toString(i: number): string {
-        let filter: string = '';
+        let filter = '';
         if (this.logicalOperator !== null && i > 0) {
             filter += ' ' + this.logicalOperator + ' ';
         } else if (i > 0 && this.logicalOperator === null) {

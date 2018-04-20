@@ -8,7 +8,7 @@ export class CountSettings {
     }
 
     toString(): string {
-        return '$count=' + (this.count || this.defaultCount);
+        return `$count=${(this.count || this.defaultCount)}`;
     }
 
     reset(): void {

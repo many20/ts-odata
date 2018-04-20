@@ -2,7 +2,6 @@ import { FilterClause } from './FilterClause';
 import { FilterObj } from './FilterObj';
 
 export class PrecedenceGroup<FilterType = any> {
-
     clauses: FilterObj[];
 
     constructor(filterClause?: FilterClause<FilterType>) {

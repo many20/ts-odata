@@ -1,4 +1,4 @@
-import {Tso} from '../Tso';
+import { Tso } from '../Tso';
 
 export interface IFormatOptions<CallForType, ReturnType = any> {
     atom(): Tso<CallForType, ReturnType>;

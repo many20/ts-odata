@@ -1,5 +1,4 @@
 export class SkipSettings {
-
     skip: number | null | undefined;
     defaultSkip: number | null;
 
@@ -9,7 +8,7 @@ export class SkipSettings {
     }
 
     toString(): string {
-        return '$skip=' + (this.skip !== null ? this.skip : this.defaultSkip);
+        return `$skip=${this.skip !== null ? this.skip : this.defaultSkip}`;
     }
 
     reset(): void {

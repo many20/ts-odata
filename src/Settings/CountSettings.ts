@@ -1,5 +1,4 @@
 export class CountSettings {
-
     count: string | null | undefined;
     defaultCount: string | null;
 

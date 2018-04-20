@@ -3,29 +3,28 @@ import { PrecedenceGroup } from '../PrecedenceGroup';
 import { FilterObj } from '../FilterObj';
 
 export class FilterSettings {
-
-    Filters: FilterObj[];
-    DefaultFilters: FilterObj[];
-    CapturedFilter: FilterObj[];
+    filters: FilterObj[];
+    defaultFilters: FilterObj[];
+    capturedFilter: FilterObj[];
 
     constructor() {
-        this.Filters = [];
-        this.DefaultFilters = [];
-        this.CapturedFilter = [];
+        this.filters = [];
+        this.defaultFilters = [];
+        this.capturedFilter = [];
     }
 
     toString() {
-        let allFilters: FilterObj[] = [];
-        let filter = '$filter=';
+        const allFilters: FilterObj[] = [];
+        let filter: string = '$filter=';
 
-        if (this.DefaultFilters.length > 0) {
-            for (let i = 0; i < this.DefaultFilters.length; i++) {
-                allFilters.push(this.DefaultFilters[i]);
+        if (this.defaultFilters.length > 0) {
+            for (let i = 0; i < this.defaultFilters.length; i++) {
+                allFilters.push(this.defaultFilters[i]);
             }
         }
 
-        for (let i = 0; i < this.Filters.length; i++) {
-            allFilters.push(this.Filters[i]);
+        for (let i = 0; i < this.filters.length; i++) {
+            allFilters.push(this.filters[i]);
         }
 
         for (let i = 0; i < allFilters.length; i++) {
@@ -36,44 +35,41 @@ export class FilterSettings {
     }
 
     reset() {
-        this.Filters = [];
-        if (this.CapturedFilter.length > 0) {
-            for (let i = 0; i < this.CapturedFilter.length; i++) {
-                this.Filters.push(this.CapturedFilter[i]);
+        this.filters = [];
+        if (this.capturedFilter.length > 0) {
+            for (let i = 0; i < this.capturedFilter.length; i++) {
+                this.filters.push(this.capturedFilter[i]);
             }
         }
     }
 
     fullReset(): void {
-        this.Filters = [];
-        this.CapturedFilter = [];
+        this.filters = [];
+        this.capturedFilter = [];
     }
 
     loadFromJson(filterSettings: FilterSettings): void {
         let filter: FilterObj;
 
-        for (let i = 0; i < filterSettings.Filters.length; i++) {
-            filter = filterSettings.Filters[i];
+        for (let i = 0; i < filterSettings.filters.length; i++) {
+            filter = filterSettings.filters[i];
             let fO: FilterObj = new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator);
-            this.Filters.push(fO);
+            this.filters.push(fO);
         }
 
-        for (let i = 0; i < filterSettings.DefaultFilters.length; i++) {
-            filter = filterSettings.DefaultFilters[i];
-            this.DefaultFilters.push(new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator));
+        for (let i = 0; i < filterSettings.defaultFilters.length; i++) {
+            filter = filterSettings.defaultFilters[i];
+            this.defaultFilters.push(new FilterObj(this.loadFilterObj(filter.filterObj), filter.logicalOperator));
         }
     }
 
     isSet(): boolean {
-        return this.Filters.length > 0 || this.DefaultFilters.length > 0;
+        return this.filters.length > 0 || this.defaultFilters.length > 0;
     }
 
-
-    private loadPrecedenceGroup(precedenceGroup: PrecedenceGroup): any {
-        let group: PrecedenceGroup;
+    private loadPrecedenceGroup(precedenceGroup: PrecedenceGroup): PrecedenceGroup {
+        const group: PrecedenceGroup = new PrecedenceGroup();
         let currentClause: FilterObj;
-
-        group = new PrecedenceGroup();
 
         for (let j = 0; j < precedenceGroup.clauses.length; j++) {
             currentClause = precedenceGroup.clauses[j];
@@ -83,13 +79,13 @@ export class FilterSettings {
         return group;
     }
 
-    private loadFilterObj(currentFilter: FilterClause | PrecedenceGroup): any {
-        // isPrecedenceGroup?
+    private loadFilterObj(currentFilter: FilterClause | PrecedenceGroup): FilterClause | PrecedenceGroup {
+        //isPrecedenceGroup?
         if ((currentFilter as PrecedenceGroup).clauses !== undefined) {
             return this.loadPrecedenceGroup(currentFilter as PrecedenceGroup);
         }
 
-        let newFilterClause: FilterClause = new FilterClause();
+        const newFilterClause: FilterClause = new FilterClause();
 
         for (let key in currentFilter) {
             if (currentFilter.hasOwnProperty(key)) {

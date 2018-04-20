@@ -1,7 +1,5 @@
 export class Concat {
-
-    constructor(public leftSide: string|Concat, public rightSide: string|Concat) {
-    }
+    constructor(public leftSide: string | Concat, public rightSide: string | Concat) {}
 
     toString(): string {
         return 'concat(' + this.writeValue(this.leftSide) + ',' + this.writeValue(this.rightSide) + ')';

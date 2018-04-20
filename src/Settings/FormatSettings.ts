@@ -1,5 +1,4 @@
 export class FormatSettings {
-
     format: string | null;
     defaultFormat: string | null;
 
@@ -9,7 +8,7 @@ export class FormatSettings {
     }
 
     toString(): string {
-        return '$format=' + (this.format || this.defaultFormat);
+        return `$format=${this.format || this.defaultFormat}`;
     }
 
     reset(): void {

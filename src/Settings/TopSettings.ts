@@ -1,5 +1,4 @@
 export class TopSettings {
-
     top: number | null | undefined;
     defaultTop: number | null;
 
@@ -9,8 +8,8 @@ export class TopSettings {
     }
 
     toString(): string {
-        return '$top=' + (this.top !== null ? this.top : this.defaultTop);
-    };
+        return `$top=${this.top !== null ? this.top : this.defaultTop}`;
+    }
 
     reset(): void {
         this.top = null;

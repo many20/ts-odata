@@ -1,5 +1,4 @@
 export class FindSettings {
-
     find: number | string | null | undefined;
     defaultFind: number | string | null;
 
@@ -9,8 +8,8 @@ export class FindSettings {
     }
 
     toString(): string {
-        return '(' + (this.find !== null ? this.find : this.defaultFind) + ')';
-    };
+        return `(${this.find !== null ? this.find : this.defaultFind})`;
+    }
 
     reset(): void {
         this.find = null;

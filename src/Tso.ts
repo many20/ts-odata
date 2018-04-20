@@ -18,141 +18,240 @@ import { IInlineCountOptions } from './Options/IInlineCountOptions';
 export { Concat } from './Concat';
 
 export class Tso<CallForType = any, ReturnType = any> {
-    baseUri: string;
-    encodeUri: boolean;
+    private _ExpandSettings?: ExpandSettings;
+    get ExpandSettings(): ExpandSettings {
+        if (!this._ExpandSettings) {
+            this._ExpandSettings = new ExpandSettings();
+        }
+        return this._ExpandSettings!;
+    }
+    set ExpandSettings(settings: ExpandSettings) {
+        this._ExpandSettings = settings;
+    }
 
-    ExpandSettings: ExpandSettings;
-    FilterSettings: FilterSettings;
-    FormatSettings: FormatSettings;
-    InlineCountSettings: InlineCountSettings;
-    OrderBySettings: OrderBySettings;
-    SelectSettings: SelectSettings;
-    SkipSettings: SkipSettings;
-    TopSettings: TopSettings;
-    CountSettings: CountSettings;
-    FindSettings: FindSettings;
-    format: IFormatOptions<CallForType, ReturnType>;
-    formatDefault: IFormatOptions<CallForType, ReturnType>;
-    inlineCount: IInlineCountOptions<CallForType, ReturnType>;
-    inlineCountDefault: IInlineCountOptions<CallForType, ReturnType>;
+    private _FilterSettings?: FilterSettings;
+    get FilterSettings(): FilterSettings {
+        if (!this._FilterSettings) {
+            this._FilterSettings = new FilterSettings();
+        }
+        return this._FilterSettings!;
+    }
+    set FilterSettings(settings: FilterSettings) {
+        this._FilterSettings = settings;
+    }
 
-    currentHashRoute: string;
+    private _InlineCountSettings?: InlineCountSettings;
+    get InlineCountSettings(): InlineCountSettings {
+        if (!this._InlineCountSettings) {
+            this._InlineCountSettings = new InlineCountSettings();
+        }
+        return this._InlineCountSettings!;
+    }
+    set InlineCountSettings(settings: InlineCountSettings) {
+        this._InlineCountSettings = settings;
+    }
 
-    public callFunction: ((queryString: string) => ReturnType) | undefined;
+    private _FormatSettings?: FormatSettings;
+    get FormatSettings(): FormatSettings {
+        if (!this._FormatSettings) {
+            this._FormatSettings = new FormatSettings();
+        }
+        return this._FormatSettings!;
+    }
+    set FormatSettings(settings: FormatSettings) {
+        this._FormatSettings = settings;
+    }
 
-    static literal(stringLiteral: { toString(): string; }): string {
-        return '\'' + stringLiteral.toString() + '\'';
+    private _OrderBySettings?: OrderBySettings;
+    get OrderBySettings(): OrderBySettings {
+        if (!this._OrderBySettings) {
+            this._OrderBySettings = new OrderBySettings();
+        }
+        return this._OrderBySettings!;
+    }
+    set OrderBySettings(settings: OrderBySettings) {
+        this._OrderBySettings = settings;
+    }
+
+    private _SelectSettings?: SelectSettings;
+    get SelectSettings(): SelectSettings {
+        if (!this._SelectSettings) {
+            this._SelectSettings = new SelectSettings();
+        }
+        return this._SelectSettings!;
+    }
+    set SelectSettings(settings: SelectSettings) {
+        this._SelectSettings = settings;
+    }
+
+    private _SkipSettings?: SkipSettings;
+    get SkipSettings(): SkipSettings {
+        if (!this._SkipSettings) {
+            this._SkipSettings = new SkipSettings();
+        }
+        return this._SkipSettings!;
+    }
+    set SkipSettings(settings: SkipSettings) {
+        this._SkipSettings = settings;
+    }
+
+    private _TopSettings?: TopSettings;
+    get TopSettings(): TopSettings {
+        if (!this._TopSettings) {
+            this._TopSettings = new TopSettings();
+        }
+        return this._TopSettings!;
+    }
+    set TopSettings(settings: TopSettings) {
+        this._TopSettings = settings;
+    }
+
+    private _CountSettings?: CountSettings;
+    get CountSettings(): CountSettings {
+        if (!this._CountSettings) {
+            this._CountSettings = new CountSettings();
+        }
+        return this._CountSettings!;
+    }
+    set CountSettings(settings: CountSettings) {
+        this._CountSettings = settings;
+    }
+
+    private _FindSettings?: FindSettings;
+    get FindSettings(): FindSettings {
+        if (!this._FindSettings) {
+            this._FindSettings = new FindSettings();
+        }
+        return this._FindSettings!;
+    }
+    set(settings: FindSettings): void {
+        this._FindSettings = settings;
+    }
+
+    private _format?: IFormatOptions<CallForType, ReturnType>;
+    get format(): IFormatOptions<CallForType, ReturnType> {
+        if (!this._format) {
+            this._format = {
+                atom: () => {
+                    this.FormatSettings.format = 'atom';
+                    return this;
+                },
+                custom: (value: string) => {
+                    this.FormatSettings.format = value;
+                    return this;
+                },
+                xml: () => {
+                    this.FormatSettings.format = 'xml';
+                    return this;
+                },
+                json: () => {
+                    this.FormatSettings.format = 'json';
+                    return this;
+                },
+            };
+        }
+        return this._format!;
+    }
+
+    private _formatDefault?: IFormatOptions<CallForType, ReturnType>;
+    get formatDefault(): IFormatOptions<CallForType, ReturnType> {
+        if (!this._formatDefault) {
+            this._formatDefault = {
+                atom: () => {
+                    this.FormatSettings.defaultFormat = 'atom';
+                    return this;
+                },
+                custom: (value: string) => {
+                    this.FormatSettings.defaultFormat = value;
+                    return this;
+                },
+                xml: () => {
+                    this.FormatSettings.defaultFormat = 'xml';
+                    return this;
+                },
+                json: () => {
+                    this.FormatSettings.defaultFormat = 'json';
+                    return this;
+                },
+            };
+        }
+        return this._formatDefault!;
+    }
+
+    private _inlineCount?: IInlineCountOptions<CallForType, ReturnType>;
+    get inlineCount(): IInlineCountOptions<CallForType, ReturnType> {
+        if (!this._inlineCount) {
+            this._inlineCount = {
+                allPages: () => {
+                    this.InlineCountSettings.inlineCount = 'allpages';
+                    return this;
+                },
+                none: () => {
+                    this.InlineCountSettings.inlineCount = 'none';
+                    return this;
+                },
+            };
+        }
+        return this._inlineCount!;
+    }
+
+    private _inlineCountDefault?: IInlineCountOptions<CallForType, ReturnType>;
+    get inlineCountDefault(): IInlineCountOptions<CallForType, ReturnType> {
+        if (!this._inlineCountDefault) {
+            this._inlineCountDefault = {
+                allPages: () => {
+                    this.InlineCountSettings.defaultInlineCount = 'allpages';
+                    return this;
+                },
+                none: () => {
+                    this.InlineCountSettings.defaultInlineCount = 'none';
+                    return this;
+                },
+            };
+        }
+        return this._inlineCountDefault!;
+    }
+
+    currentHashRoute?: string;
+
+    static literal(stringLiteral: { toString(): string }): string {
+        return `'${stringLiteral.toString()}'`;
     }
 
     static datetime(datetime: string): string {
-        return 'datetime\'' + datetime + '\'';
+        return `datetime'${datetime}'`;
     }
 
     static guid(guid: string): string {
-        return 'guid\'' + guid + '\'';
+        return `guid'${guid}'`;
     }
 
     static v4guid(guid: string): string {
-        return 'v4guid' + guid;
+        return `v4guid${guid}`;
     }
 
     static decimal(decimal: number): string {
-        return decimal + 'm';
+        return `${decimal}m`;
     }
 
     static double(double: number): string {
-        return double + 'd';
+        return `${double}d`;
     }
 
     static single(single: number) {
-        return single + 'f';
+        return `${single}f`;
     }
 
-    // cast(type) or cast(expression,type)
+    //cast(type) or cast(expression,type)
     static cast(expression: string | null = null, type: string) {
         if (!!expression) {
-            return 'cast(' + type + ')';
+            return `cast(${type})`;
         } else {
-            return 'cast(' + expression + ',' + type + ')';
+            return `cast(${expression},${type})`;
         }
     }
 
-    constructor (baseUri: string, encodeUri: boolean = true) {
-        this.baseUri = baseUri;
-        this.encodeUri = encodeUri;
-
-        this.ExpandSettings = new ExpandSettings();
-        this.FilterSettings = new FilterSettings();
-        this.FormatSettings = new FormatSettings();
-        this.InlineCountSettings = new InlineCountSettings();
-        this.OrderBySettings = new OrderBySettings();
-        this.SelectSettings = new SelectSettings();
-        this.SkipSettings = new SkipSettings();
-        this.TopSettings = new TopSettings();
-        this.CountSettings = new CountSettings();
-        this.FindSettings = new FindSettings();
-
-        let contextThis = this;
-
-        this.format = {
-            atom: function () {
-                contextThis.FormatSettings.format = 'atom';
-                return contextThis;
-            },
-            custom: function (value: string) {
-                contextThis.FormatSettings.format = value;
-                return contextThis;
-            },
-            xml: function () {
-                contextThis.FormatSettings.format = 'xml';
-                return contextThis;
-            },
-            json: function () {
-                contextThis.FormatSettings.format = 'json';
-                return contextThis;
-            }
-        };
-        this.formatDefault = {
-            atom: function () {
-                contextThis.FormatSettings.defaultFormat = 'atom';
-                return contextThis;
-            },
-            custom: function (value: string) {
-                contextThis.FormatSettings.defaultFormat = value;
-                return contextThis;
-            },
-            xml: function () {
-                contextThis.FormatSettings.defaultFormat = 'xml';
-                return contextThis;
-            },
-            json: function () {
-                contextThis.FormatSettings.defaultFormat = 'json';
-                return contextThis;
-            }
-        };
-
-        this.inlineCount = {
-            allPages: function () {
-                contextThis.InlineCountSettings.inlineCount = 'allpages';
-                return contextThis;
-            },
-            none: function () {
-                contextThis.InlineCountSettings.inlineCount = 'none';
-                return contextThis;
-            }
-        };
-
-        this.inlineCountDefault = {
-            allPages: function () {
-                contextThis.InlineCountSettings.defaultInlineCount = 'allpages';
-                return contextThis;
-            },
-            none: function () {
-                contextThis.InlineCountSettings.defaultInlineCount = 'none';
-                return contextThis;
-            }
-        };
-    }
+    constructor(public baseUri: string, public encodeUri: boolean = true) {}
 
     updateHashRoute(hashRoute: string): void {
         this.currentHashRoute = hashRoute;
@@ -182,7 +281,7 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     toggleOrderBy(property: string, callback?: Function): Tso<CallForType, ReturnType> {
-        let useDesc = this.OrderBySettings.property === null || this.OrderBySettings.order === 'asc';
+        const useDesc = this.OrderBySettings.property === null || this.OrderBySettings.order === 'asc';
         (<any>this.orderBy(property))[useDesc ? 'desc' : 'asc']();
 
         if (callback && typeof callback === 'function') {
@@ -274,7 +373,6 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     expand<U = any>(expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined): Tso<CallForType, ReturnType> {
-
         if (!!expand) {
             if (!Array.isArray(expand)) {
                 expand = [expand];
@@ -323,21 +421,21 @@ export class Tso<CallForType = any, ReturnType = any> {
     // Filter
     filter(filterClause: FilterClause<CallForType> | PrecedenceGroup<CallForType> | null | undefined): Tso<CallForType, ReturnType> {
         if (filterClause !== null && typeof filterClause !== 'undefined') {
-            this.FilterSettings.Filters.push(new FilterObj(filterClause));
+            this.FilterSettings.filters.push(new FilterObj(filterClause));
         }
         return this;
     }
 
     andFilter(filterClause: FilterClause<CallForType> | PrecedenceGroup<CallForType> | null | undefined): Tso<CallForType, ReturnType> {
         if (filterClause !== null && typeof filterClause !== 'undefined') {
-            this.FilterSettings.Filters.push(new FilterObj(filterClause, 'and'));
+            this.FilterSettings.filters.push(new FilterObj(filterClause, 'and'));
         }
         return this;
     }
 
     orFilter(filterClause: FilterClause<CallForType> | PrecedenceGroup<CallForType> | null | undefined): Tso<CallForType, ReturnType> {
         if (filterClause !== null && typeof filterClause !== 'undefined') {
-            this.FilterSettings.Filters.push(new FilterObj(filterClause, 'or'));
+            this.FilterSettings.filters.push(new FilterObj(filterClause, 'or'));
         }
         return this;
     }
@@ -347,22 +445,22 @@ export class Tso<CallForType = any, ReturnType = any> {
             return this;
         }
 
-        for (let i = 0; i < this.FilterSettings.Filters.length; i++) {
-            // isFilterClause
-            if ((this.FilterSettings.Filters[i].filterObj as FilterClause).property === property) {
-                this.FilterSettings.Filters.splice(i, 1);
+        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
+            //isFilterClause
+            if ((this.FilterSettings.filters[i].filterObj as FilterClause).property === property) {
+                this.FilterSettings.filters.splice(i, 1);
             }
         }
 
-        // TODO: remove PrecedenceGroups Filter
+        //TODO: remove PrecedenceGroups Filter
 
         return this;
     }
 
     captureFilter(): void {
-        this.FilterSettings.CapturedFilter = [];
-        for (let i = 0; i < this.FilterSettings.Filters.length; i++) {
-            this.FilterSettings.CapturedFilter.push(this.FilterSettings.Filters[i]);
+        this.FilterSettings.capturedFilter = [];
+        for (let i = 0; i < this.FilterSettings.filters.length; i++) {
+            this.FilterSettings.capturedFilter.push(this.FilterSettings.filters[i]);
         }
     }
 
@@ -377,17 +475,17 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     defaultFilter(filterClause: FilterClause<CallForType>): Tso<CallForType, ReturnType> {
-        this.FilterSettings.DefaultFilters.push(new FilterObj(filterClause));
+        this.FilterSettings.defaultFilters.push(new FilterObj(filterClause));
         return this;
     }
 
     defaultAndFilter(filterClause: FilterClause<CallForType>): Tso<CallForType, ReturnType> {
-        this.FilterSettings.DefaultFilters.push(new FilterObj(filterClause, 'and'));
+        this.FilterSettings.defaultFilters.push(new FilterObj(filterClause, 'and'));
         return this;
     }
 
     defaultOrFilter(filterClause: FilterClause<CallForType>): Tso<CallForType, ReturnType> {
-        this.FilterSettings.DefaultFilters.push(new FilterObj(filterClause, 'or'));
+        this.FilterSettings.defaultFilters.push(new FilterObj(filterClause, 'or'));
         return this;
     }
 
@@ -398,43 +496,43 @@ export class Tso<CallForType = any, ReturnType = any> {
         url = this.baseUri;
         components = [];
 
-        if (this.FindSettings.isSet()) {
+        if (!!this._FindSettings && this.FindSettings.isSet()) {
             url += this.FindSettings.toString();
         }
 
-        if (this.OrderBySettings.isSet()) {
+        if (!!this._OrderBySettings && this.OrderBySettings.isSet()) {
             components.push(this.OrderBySettings.toString());
         }
 
-        if (this.TopSettings.isSet()) {
+        if (!!this._TopSettings && this.TopSettings.isSet()) {
             components.push(this.TopSettings.toString());
         }
 
-        if (this.SkipSettings.isSet()) {
+        if (!!this._SkipSettings && this.SkipSettings.isSet()) {
             components.push(this.SkipSettings.toString());
         }
 
-        if (this.SelectSettings.isSet()) {
+        if (!!this._SelectSettings && this.SelectSettings.isSet()) {
             components.push(this.SelectSettings.toString());
         }
 
-        if (this.FilterSettings.isSet()) {
+        if (!!this._FilterSettings && this.FilterSettings.isSet()) {
             components.push(this.FilterSettings.toString());
         }
 
-        if (this.ExpandSettings.isSet()) {
+        if (!!this._ExpandSettings && this.ExpandSettings.isSet()) {
             components.push(this.ExpandSettings.toString());
         }
 
-        if (this.FormatSettings.isSet()) {
+        if (!!this._FormatSettings && this.FormatSettings.isSet()) {
             components.push(this.FormatSettings.toString());
         }
 
-        if (this.InlineCountSettings.isSet()) {
+        if (!!this._InlineCountSettings && this.InlineCountSettings.isSet()) {
             components.push(this.InlineCountSettings.toString());
         }
 
-        if (this.CountSettings.isSet()) {
+        if (!!this._CountSettings && this.CountSettings.isSet()) {
             components.push(this.CountSettings.toString());
         }
 
@@ -448,7 +546,7 @@ export class Tso<CallForType = any, ReturnType = any> {
     }
 
     toJson(): string {
-        let jsonObj: any = {};
+        const jsonObj: any = {};
 
         jsonObj.baseUri = this.baseUri;
         jsonObj.currentHashRoute = this.currentHashRoute;
@@ -465,50 +563,51 @@ export class Tso<CallForType = any, ReturnType = any> {
 
         jsonObj.defaults = (<any>this).defaults;
 
-        if (this.FindSettings.isSet()) {
+        if (!!this._FindSettings && this.FindSettings.isSet()) {
             jsonObj.FindSettings = this.FindSettings;
         }
 
-        if (this.OrderBySettings.isSet()) {
+        if (!!this._OrderBySettings && this.OrderBySettings.isSet()) {
             jsonObj.OrderBySettings = this.OrderBySettings;
         }
 
-        if (this.TopSettings.isSet()) {
+        if (!!this._TopSettings && this.TopSettings.isSet()) {
             jsonObj.TopSettings = this.TopSettings;
         }
 
-        if (this.SkipSettings.isSet()) {
+        if (!!this._SkipSettings && this.SkipSettings.isSet()) {
             jsonObj.SkipSettings = this.SkipSettings;
         }
 
-        if (this.SelectSettings.isSet()) {
+        if (!!this._SelectSettings && this.SelectSettings.isSet()) {
             jsonObj.SelectSettings = this.SelectSettings;
         }
 
-        if (this.ExpandSettings.isSet()) {
+        if (!!this._ExpandSettings && this.ExpandSettings.isSet()) {
             jsonObj.ExpandSettings = this.ExpandSettings;
         }
 
-        if (this.FormatSettings.isSet()) {
+        if (!!this._FormatSettings && this.FormatSettings.isSet()) {
             jsonObj.FormatSettings = this.FormatSettings;
         }
 
-        if (this.InlineCountSettings.isSet()) {
+        if (!!this._InlineCountSettings && this.InlineCountSettings.isSet()) {
             jsonObj.InlineCountSettings = this.InlineCountSettings;
         }
 
-        if (this.FilterSettings.isSet()) {
+        if (!!this._FilterSettings && this.FilterSettings.isSet()) {
             jsonObj.FilterSettings = this.FilterSettings;
         }
 
-        if (this.CountSettings.isSet()) {
+        if (!!this._CountSettings && this.CountSettings.isSet()) {
             jsonObj.CountSettings = this.CountSettings;
         }
 
         return JSON.stringify(jsonObj);
     }
 
-    public setCallFunction(callFunction: (queryString: string) => ReturnType): Tso<CallForType, ReturnType> {
+    public callFunction: ((queryString: string) => ReturnType) | undefined;
+    public setCallFunction(callFunction: (queryString: string) => ReturnType) {
         this.callFunction = callFunction;
         return this;
     }
@@ -524,7 +623,4 @@ export class Tso<CallForType = any, ReturnType = any> {
 
         return this.callFunction(this.toString());
     }
-
 }
-
-export default Tso;

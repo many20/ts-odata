@@ -1,7 +1,6 @@
 export class ExpandSettings {
-
-    expand: { toString: () => string; }[] | null | undefined;
-    defaultExpand: { toString: () => string; }[] | null;
+    expand: { toString: () => string }[] | null | undefined;
+    defaultExpand: { toString: () => string }[] | null;
 
     constructor() {
         this.expand = null;
@@ -9,8 +8,8 @@ export class ExpandSettings {
     }
 
     toString(): string {
-        let expandArray: { toString: () => string; }[] = (this.expand || this.defaultExpand) || [];
-        return '$expand=' + expandArray.map((e) => e.toString()).join(',');
+        const expandArray: { toString: () => string }[] = this.expand || this.defaultExpand || [];
+        return '$expand=' + expandArray.map(e => e.toString()).join(',');
     }
 
     reset(): void {

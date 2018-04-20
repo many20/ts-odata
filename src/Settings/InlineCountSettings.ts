@@ -1,5 +1,4 @@
 export class InlineCountSettings {
-
     inlineCount: string | null;
     defaultInlineCount: string | null;
 
@@ -9,7 +8,7 @@ export class InlineCountSettings {
     }
 
     toString(): string {
-        return '$inlinecount=' + (this.inlineCount || this.defaultInlineCount);
+        return `$inlinecount=${this.inlineCount || this.defaultInlineCount}`;
     }
 
     reset(): void {

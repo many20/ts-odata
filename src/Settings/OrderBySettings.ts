@@ -1,5 +1,4 @@
 export class OrderBySettings {
-
     property: string | null | undefined;
     order: string | null;
     defaultProperty: string | null;
@@ -13,9 +12,9 @@ export class OrderBySettings {
     }
 
     toString(): string {
-        let qsValue: string = '$orderby=' + (this.property || this.defaultProperty);
+        let qsValue: string = `$orderby=${this.property || this.defaultProperty}`;
         if (this.defaultOrder !== null || this.order !== null) {
-            qsValue += ' ' + (this.order || this.defaultOrder);
+            qsValue += ` ${this.order || this.defaultOrder}`;
         }
 
         return qsValue;

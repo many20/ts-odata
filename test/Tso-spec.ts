@@ -480,9 +480,7 @@ describe('tsdata', () => {
                 let j = new Tso('http://foo.bar');
                 j.filter(new FilterClause('CustomerName').eq('bob')).andFilter(new FilterClause('Title').substringof('bob').eq(true));
 
-                expect(j.toString()).to.equal(
-                    "http://foo.bar?$filter=CustomerName%20eq%20'bob'%20and%20substringof('bob',Title)%20eq%20true",
-                );
+                expect(j.toString()).to.equal("http://foo.bar?$filter=CustomerName%20eq%20'bob'%20and%20substringof('bob',Title)%20eq%20true");
 
                 j.removeFilter('Title');
                 expect(j.toString()).to.equal("http://foo.bar?$filter=CustomerName%20eq%20'bob'");
@@ -705,17 +703,9 @@ describe('tsdata', () => {
 
             it('mixing precedence groups', function() {
                 let j = new Tso('http://foo.bar');
-                j
-                    .filter(new FilterClause('Id').eq(1))
-                    .andFilter(
-                        new PrecedenceGroup(new FilterClause('Name').startswith('a').eq(true)).orFilter(
-                            new FilterClause('Name').startswith('b').eq(true),
-                        ),
-                    );
+                j.filter(new FilterClause('Id').eq(1)).andFilter(new PrecedenceGroup(new FilterClause('Name').startswith('a').eq(true)).orFilter(new FilterClause('Name').startswith('b').eq(true)));
 
-                expect(j.toString()).to.equal(
-                    "http://foo.bar?$filter=Id%20eq%201%20and%20(startswith(Name,'a')%20eq%20true%20or%20startswith(Name,'b')%20eq%20true)",
-                );
+                expect(j.toString()).to.equal("http://foo.bar?$filter=Id%20eq%201%20and%20(startswith(Name,'a')%20eq%20true%20or%20startswith(Name,'b')%20eq%20true)");
             });
         });
 

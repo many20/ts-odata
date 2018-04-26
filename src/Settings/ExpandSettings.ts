@@ -9,7 +9,7 @@ export class ExpandSettings {
 
     toString(): string {
         const expandArray: { toString: () => string }[] = this.expand || this.defaultExpand || [];
-        return `$expand='${expandArray.map(e => e.toString()).join(',')}`;
+        return `$expand=${expandArray.map(e => e.toString()).join(',')}`;
     }
 
     reset(): void {

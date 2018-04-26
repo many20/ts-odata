@@ -11,7 +11,8 @@
   "homepage": "https://github.com/TrekkingForCharity/ts-odata",
   "author": "Trekking for Charity",
   "contributors": [
-    "Andrew Davis"
+    "Andrew Davis",
+    "Mario Adrian"
   ],
   "keywords": [
     "jodata",
@@ -27,7 +28,8 @@
     "watch": "npm run build -- --watch",
     "watch:test": "npm run test -- --watch",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "postinstall": "tsc"
+    "postinstall": "tsc",
+    "prettier": "prettier --write ./src/**/*.ts && prettier --write ./test/**/*.ts"
   },
   "dependencies": {},
   "devDependencies": {

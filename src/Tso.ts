@@ -1,19 +1,19 @@
-import { FilterClause } from './FilterClause';
-import { ExpandClause } from './ExpandClause';
-import { PrecedenceGroup } from './PrecedenceGroup';
-import { FilterObj } from './FilterObj';
-import { OrderBySettings } from './Settings/OrderBySettings';
-import { TopSettings } from './Settings/TopSettings';
-import { SkipSettings } from './Settings/SkipSettings';
-import { SelectSettings } from './Settings/SelectSettings';
-import { ExpandSettings } from './Settings/ExpandSettings';
-import { FormatSettings } from './Settings/FormatSettings';
-import { InlineCountSettings } from './Settings/InlineCountSettings';
-import { CountSettings } from './Settings/CountSettings';
-import { FindSettings } from './Settings/FindSettings';
-import { FilterSettings } from './Settings/FilterSettings';
-import { IFormatOptions } from './Options/IFormatOptions';
-import { IInlineCountOptions } from './Options/IInlineCountOptions';
+import FilterClause from './FilterClause';
+import ExpandClause from './ExpandClause';
+import PrecedenceGroup from './PrecedenceGroup';
+import FilterObj from './FilterObj';
+import OrderBySettings from './Settings/OrderBySettings';
+import TopSettings from './Settings/TopSettings';
+import SkipSettings from './Settings/SkipSettings';
+import SelectSettings from './Settings/SelectSettings';
+import ExpandSettings from './Settings/ExpandSettings';
+import FormatSettings from './Settings/FormatSettings';
+import InlineCountSettings from './Settings/InlineCountSettings';
+import CountSettings from './Settings/CountSettings';
+import FindSettings from './Settings/FindSettings';
+import FilterSettings from './Settings/FilterSettings';
+import FormatOptions from './Options/FormatOptions';
+import InlineCountOptions from './Options/InlineCountOptions';
 
 export { Concat } from './Concat';
 
@@ -128,8 +128,8 @@ export class Tso<CallForType = any, ReturnType = any> {
         this._FindSettings = settings;
     }
 
-    private _format?: IFormatOptions<CallForType, ReturnType>;
-    get format(): IFormatOptions<CallForType, ReturnType> {
+    private _format?: FormatOptions<CallForType, ReturnType>;
+    get format(): FormatOptions<CallForType, ReturnType> {
         if (!this._format) {
             this._format = {
                 atom: () => {
@@ -153,8 +153,8 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this._format!;
     }
 
-    private _formatDefault?: IFormatOptions<CallForType, ReturnType>;
-    get formatDefault(): IFormatOptions<CallForType, ReturnType> {
+    private _formatDefault?: FormatOptions<CallForType, ReturnType>;
+    get formatDefault(): FormatOptions<CallForType, ReturnType> {
         if (!this._formatDefault) {
             this._formatDefault = {
                 atom: () => {
@@ -178,8 +178,8 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this._formatDefault!;
     }
 
-    private _inlineCount?: IInlineCountOptions<CallForType, ReturnType>;
-    get inlineCount(): IInlineCountOptions<CallForType, ReturnType> {
+    private _inlineCount?: InlineCountOptions<CallForType, ReturnType>;
+    get inlineCount(): InlineCountOptions<CallForType, ReturnType> {
         if (!this._inlineCount) {
             this._inlineCount = {
                 allPages: () => {
@@ -195,8 +195,8 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this._inlineCount!;
     }
 
-    private _inlineCountDefault?: IInlineCountOptions<CallForType, ReturnType>;
-    get inlineCountDefault(): IInlineCountOptions<CallForType, ReturnType> {
+    private _inlineCountDefault?: InlineCountOptions<CallForType, ReturnType>;
+    get inlineCountDefault(): InlineCountOptions<CallForType, ReturnType> {
         if (!this._inlineCountDefault) {
             this._inlineCountDefault = {
                 allPages: () => {
@@ -253,7 +253,7 @@ export class Tso<CallForType = any, ReturnType = any> {
         return `cast(${expression},${type})`;
     }
 
-    constructor(public baseUri: string, public encodeUri: boolean = true) {}
+    constructor(public baseUri: string, public encodeResult: boolean = false) {}
 
     updateHashRoute(hashRoute: string): void {
         this.currentHashRoute = hashRoute;
@@ -374,9 +374,7 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this;
     }
 
-    expand<U = any>(
-        expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined,
-    ): Tso<CallForType, ReturnType> {
+    expand<U = any>(expand: keyof CallForType | ExpandClause<CallForType, U> | (keyof CallForType | ExpandClause<CallForType, U>)[] | null | undefined): Tso<CallForType, ReturnType> {
         if (!!expand) {
             if (!Array.isArray(expand)) {
                 expand = [expand];
@@ -540,7 +538,7 @@ export class Tso<CallForType = any, ReturnType = any> {
 
         let queryUrl = components.length > 0 ? url + '?' + components.join('&') : url;
 
-        if (this.encodeUri) {
+        if (this.encodeResult) {
             queryUrl = encodeURI(queryUrl);
         }
 
@@ -625,3 +623,5 @@ export class Tso<CallForType = any, ReturnType = any> {
         return this.callFunction(this.toString());
     }
 }
+
+export default Tso;

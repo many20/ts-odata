@@ -1,6 +1,6 @@
-import { FilterClause } from '../FilterClause';
-import { PrecedenceGroup } from '../PrecedenceGroup';
-import { FilterObj } from '../FilterObj';
+import FilterClause from '../FilterClause';
+import PrecedenceGroup from '../PrecedenceGroup';
+import FilterObj from '../FilterObj';
 
 export class FilterSettings {
     filters: FilterObj[];
@@ -96,3 +96,5 @@ export class FilterSettings {
         return newFilterClause;
     }
 }
+
+export default FilterSettings;

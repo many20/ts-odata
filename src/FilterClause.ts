@@ -1,8 +1,8 @@
-import { Helpers } from './Helpers';
-import { Concat } from './Concat';
-import { IFilterClause } from './IFilterClause';
+import Helpers from './Helpers';
+import Concat from './Concat';
+import FilterClauseInterface from './FilterClauseInterface';
 
-export class FilterClause<FilterType = any, FilterOfType = any> implements IFilterClause<FilterType, FilterOfType> {
+export class FilterClause<FilterType = any, FilterOfType = any> implements FilterClauseInterface<FilterType, FilterOfType> {
     property: keyof FilterType | null;
     components: string[];
     isClauseEmpty: boolean;
@@ -318,3 +318,5 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
         return this;
     }
 }
+
+export default FilterClause;

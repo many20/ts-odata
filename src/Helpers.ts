@@ -1,4 +1,4 @@
-import { IFilterClause } from './IFilterClause';
+import FilterClause from './FilterClauseInterface';
 
 export class Helpers {
     public static formatValue(value: string | number | boolean): string | number | boolean {
@@ -34,7 +34,7 @@ export class Helpers {
         return value;
     }
 
-    public static addLogicalOperator(value: string | number | boolean, operator: string, filterClause: IFilterClause): IFilterClause {
+    public static addLogicalOperator(value: string | number | boolean, operator: string, filterClause: FilterClause): FilterClause {
         filterClause.value = value;
         filterClause.isClauseEmpty = false;
 
@@ -43,7 +43,7 @@ export class Helpers {
         return filterClause;
     }
 
-    public static addLogicalOperatorForProperty(propertyName: string, operator: string, filterClause: IFilterClause): IFilterClause {
+    public static addLogicalOperatorForProperty(propertyName: string, operator: string, filterClause: FilterClause): FilterClause {
         filterClause.value = propertyName;
         filterClause.isClauseEmpty = false;
 
@@ -52,13 +52,13 @@ export class Helpers {
         return filterClause;
     }
 
-    public static addArithmeticOperator(amount: number, operator: string, filterClause: IFilterClause): IFilterClause {
+    public static addArithmeticOperator(amount: number, operator: string, filterClause: FilterClause): FilterClause {
         filterClause.components.push(`${operator} ${amount}`);
 
         return filterClause;
     }
 
-    public static addMethodWrapper(filterClause: IFilterClause, func: string): IFilterClause {
+    public static addMethodWrapper(filterClause: FilterClause, func: string): FilterClause {
         filterClause.propertyIncluded = true;
         filterClause.funcReturnType = Number();
         filterClause.components.push(`${func}(${filterClause.property})`);
@@ -66,3 +66,5 @@ export class Helpers {
         return filterClause;
     }
 }
+
+export default Helpers;

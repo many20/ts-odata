@@ -15,3 +15,5 @@ export class Concat {
         return value.toString();
     }
 }
+
+export default Concat;

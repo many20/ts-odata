@@ -19,3 +19,5 @@ export class CountSettings {
         return (this.count !== null && typeof this.count !== 'undefined') || this.defaultCount !== null;
     }
 }
+
+export default CountSettings;

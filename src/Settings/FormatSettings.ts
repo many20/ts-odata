@@ -19,3 +19,5 @@ export class FormatSettings {
         return this.format !== null || this.defaultFormat !== null;
     }
 }
+
+export default FormatSettings;

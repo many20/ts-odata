@@ -1,12 +1,12 @@
-import { FilterClause } from './FilterClause';
-import { PrecedenceGroup } from './PrecedenceGroup';
-import { FilterObj } from './FilterObj';
-import { OrderBySettings } from './Settings/OrderBySettings';
-import { TopSettings } from './Settings/TopSettings';
-import { SkipSettings } from './Settings/SkipSettings';
-import { SelectSettings } from './Settings/SelectSettings';
-import { ExpandSettings } from './Settings/ExpandSettings';
-import { FilterSettings } from './Settings/FilterSettings';
+import FilterClause from './FilterClause';
+import PrecedenceGroup from './PrecedenceGroup';
+import FilterObj from './FilterObj';
+import OrderBySettings from './Settings/OrderBySettings';
+import TopSettings from './Settings/TopSettings';
+import SkipSettings from './Settings/SkipSettings';
+import SelectSettings from './Settings/SelectSettings';
+import ExpandSettings from './Settings/ExpandSettings';
+import FilterSettings from './Settings/FilterSettings';
 
 export class ExpandClause<ExpandType = any, ExpandOfType = any> {
     private _ExpandSettings?: ExpandSettings;
@@ -161,9 +161,7 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
     }
 
     // expand
-    setExpandDefault<U>(
-        expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]
-    ): ExpandClause<ExpandType, ExpandOfType> {
+    setExpandDefault<U>(expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]): ExpandClause<ExpandType, ExpandOfType> {
         if (!Array.isArray(expand)) {
             expand = [expand];
         }
@@ -172,9 +170,7 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
         return this;
     }
 
-    expand<U>(
-        expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]
-    ): ExpandClause<ExpandType, ExpandOfType> {
+    expand<U>(expand: keyof ExpandOfType | ExpandClause<ExpandOfType, U> | (keyof ExpandOfType | ExpandClause<ExpandOfType, U>)[]): ExpandClause<ExpandType, ExpandOfType> {
         if (!Array.isArray(expand)) {
             expand = [expand];
         }
@@ -285,3 +281,5 @@ export class ExpandClause<ExpandType = any, ExpandOfType = any> {
         return components.length > 0 ? `${url}(${components.join('; ')})` : url;
     }
 }
+
+export default ExpandClause;

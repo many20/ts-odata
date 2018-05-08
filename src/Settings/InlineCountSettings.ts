@@ -19,3 +19,5 @@ export class InlineCountSettings {
         return this.inlineCount !== null || this.defaultInlineCount !== null;
     }
 }
+
+export default InlineCountSettings;

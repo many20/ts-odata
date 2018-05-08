@@ -1,4 +1,4 @@
-export interface IFilterClause<FilterType = any, FilterOfType = any> {
+export interface FilterClauseInterface<FilterType = any, FilterOfType = any> {
     property: keyof FilterType | null;
     components: string[];
     isClauseEmpty: boolean;
@@ -10,3 +10,5 @@ export interface IFilterClause<FilterType = any, FilterOfType = any> {
 
     toString(): string;
 }
+
+export default FilterClauseInterface;

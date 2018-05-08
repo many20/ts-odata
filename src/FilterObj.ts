@@ -1,5 +1,5 @@
-import { FilterClause } from './FilterClause';
-import { PrecedenceGroup } from './PrecedenceGroup';
+import FilterClause from './FilterClause';
+import PrecedenceGroup from './PrecedenceGroup';
 
 export class FilterObj<FilterType = any> {
     filterObj: FilterClause<FilterType> | PrecedenceGroup<FilterType>;
@@ -27,3 +27,5 @@ export class FilterObj<FilterType = any> {
         return filter;
     }
 }
+
+export default FilterObj;

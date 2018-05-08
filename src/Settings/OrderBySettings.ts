@@ -29,3 +29,5 @@ export class OrderBySettings {
         return (this.property !== null && typeof this.property !== 'undefined') || this.defaultProperty !== null;
     }
 }
+
+export default OrderBySettings;

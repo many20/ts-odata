@@ -20,3 +20,5 @@ export class SelectSettings {
         return (this.select !== null && typeof this.select !== 'undefined') || this.defaultSelect !== null;
     }
 }
+
+export default SelectSettings;

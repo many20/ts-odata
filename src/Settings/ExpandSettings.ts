@@ -20,3 +20,5 @@ export class ExpandSettings {
         return (this.expand !== null && typeof this.expand !== 'undefined') || this.defaultExpand !== null;
     }
 }
+
+export default ExpandSettings;

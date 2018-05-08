@@ -19,3 +19,5 @@ export class SkipSettings {
         return (this.skip !== null && typeof this.skip !== 'undefined') || this.defaultSkip !== null;
     }
 }
+
+export default SkipSettings;

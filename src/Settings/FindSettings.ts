@@ -19,3 +19,5 @@ export class FindSettings {
         return (this.find !== null && typeof this.find !== 'undefined') || this.defaultFind !== null;
     }
 }
+
+export default FindSettings;

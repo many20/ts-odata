@@ -19,3 +19,5 @@ export class TopSettings {
         return (this.top !== null && typeof this.top !== 'undefined') || this.defaultTop !== null;
     }
 }
+
+export default TopSettings;

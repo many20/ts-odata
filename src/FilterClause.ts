@@ -48,11 +48,17 @@ export class FilterClause<FilterType = any, FilterOfType = any> implements IFilt
     }
 
     // Logical operators
-    eq(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+    eq(value: string | number | boolean | null): FilterClause<FilterType, FilterOfType> {
+        if (value === null) {
+            return Helpers.addLogicalOperatorForProperty('null', 'eq', this) as FilterClause<FilterType, FilterOfType>;
+        }
         return Helpers.addLogicalOperator(value, 'eq', this) as FilterClause<FilterType, FilterOfType>;
     }
 
-    ne(value: string | number | boolean): FilterClause<FilterType, FilterOfType> {
+    ne(value: string | number | boolean | null): FilterClause<FilterType, FilterOfType> {
+        if (value === null) {
+            return Helpers.addLogicalOperatorForProperty('null', 'ne', this) as FilterClause<FilterType, FilterOfType>;
+        }
         return Helpers.addLogicalOperator(value, 'ne', this) as FilterClause<FilterType, FilterOfType>;
     }
 

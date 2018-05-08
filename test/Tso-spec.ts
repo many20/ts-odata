@@ -582,6 +582,12 @@ describe('tsdata', () => {
                 expect(j.toString()).to.equal('http://foo.bar?$filter=IsCustomer%20eq%20true');
             });
 
+            it('Equals - null', function () {
+                let j = new Tso('http://foo.bar');
+                j.filter(new FilterClause('IsCustomer').eq(null));
+                expect(j.toString()).to.equal('http://foo.bar?$filter=IsCustomer%20eq%20null');
+            });
+
             it('Not Equals - string', function() {
                 let j = new Tso('http://foo.bar');
                 j.filter(new FilterClause('CustomerName').ne('bob'));
@@ -598,6 +604,12 @@ describe('tsdata', () => {
                 let j = new Tso('http://foo.bar');
                 j.filter(new FilterClause('IsCustomer').ne(true));
                 expect(j.toString()).to.equal('http://foo.bar?$filter=IsCustomer%20ne%20true');
+            });
+
+            it('Equals - null', function () {
+                let j = new Tso('http://foo.bar');
+                j.filter(new FilterClause('IsCustomer').ne(null));
+                expect(j.toString()).to.equal('http://foo.bar?$filter=IsCustomer%20ne%20null');
             });
 
             it('Greater Than - string', function() {
